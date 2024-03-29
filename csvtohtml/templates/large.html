@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ratings for {{ title }}</title>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script src="/jquery.lazyload.js"></script>
+<script src="/jquery.csv-0.71.min.js"></script>
+<script type="text/javascript">
+function isLocalFileSupported() {
+    return window.File && window.FileReader && window.FileList;
+}
+
+function handleFileSelect(evt) {
+    var files = evt.target.files;
+    var file = files[0];
+    var reader = new FileReader();
+    reader.onload = function(event){
+        var csv = event.target.result;
+        var csv_lines = csv.split("\n");
+        var imdbids = [];
+        for(var i = 1; i < csv_lines.length; ++i) {
+            try {
+                var data = jQuery.csv.toArray(csv_lines[i]);
+                imdbids.push(data[1]);
+            }
+            catch(e) {
+                console.log("Exception: " + e);
+                console.log("Bad line: " + csv_lines[i]);
+            }
+        }         
+        $cachedEntries = jQuery("li.entry");
+        for(var i = 0; i < $cachedEntries.length; ++i)
+        {
+            $current = $cachedEntries.eq(i);
+            $title = $current.find(".title");
+            $title.removeClass("seen"); 
+            if(imdbids.indexOf($current.data("imdbid")) != -1) {
+                $current.removeClass("unchecked").addClass("checked");
+                $title.addClass("seen");
+            }
+            else {
+                $current.removeClass("checked").addClass("unchecked");
+            }
+        }
+        
+        var html = '<div class="control" id="showcontrols"><a href="#" id="showall">All (' + $cachedEntries.length + ')</a> '
+                 + '<a href="#" id="showchecked">Checked (' + $cachedEntries.filter(".checked").length + ')</a> ' 
+                 + '<a href="#" id="showunchecked">Unchecked (' + $cachedEntries.filter(".unchecked").length + ')</a></div>';
+                 
+        jQuery("#showcontrols").remove();
+        jQuery("#csv").append(html);
+        
+        jQuery("#showall").bind("click", function(e){
+            e.preventDefault();
+            $cachedEntries.show();
+        });
+        
+        jQuery("#showchecked").bind("click", function(e){
+            e.preventDefault();
+            $cachedEntries.hide();
+            $cachedEntries.filter(".checked").show();
+        });
+        
+        jQuery("#showunchecked").bind("click", function(e){
+            e.preventDefault();
+            $cachedEntries.hide();
+            $cachedEntries.filter(".unchecked").show();
+        });         
+    }
+    
+    reader.readAsText(file);        
+}
+
+jQuery(document).ready(function() { 
+    jQuery("img.lazy").lazyload();
+    
+    if(isLocalFileSupported()) {
+        jQuery("#csv").prepend('<div class="control"><span>IMDb Ratings CSV: </span><input type="file" id="file-select" name="files[]" size="45"></div>');
+        jQuery("#file-select").bind("change", handleFileSelect);
+    } 
+});
+</script>
+<style type="text/css">
+#preview {
+	position: absolute;
+	border: 1px solid #ccc;
+	background: #333;
+	padding: 5px;
+	display: none;
+	color: #fff;
+}
+.title {
+    width: 380px;
+    font-size: 22px;
+}
+#wrapper {
+    width: 820px;
+    margin: 0 auto;
+}
+a {
+    color: #fff;
+    text-decoration: none;
+}
+h1, p {
+    margin: 0;
+}
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 13px;
+}
+.entry {
+    margin-top: 8px;
+    position: relative;
+}
+.entry > h1.title {
+    position: relative;
+}
+.seen a {
+    color: #66E066 !important;
+}
+.control {
+    padding: 5px 0;
+    border-bottom: 1px solid #fff;
+}
+#showcontrols a {
+    margin-right: 20px;
+}
+.info-col {
+    vertical-align: top
+}
+.info {              
+    font-family: 'Open Sans Condensed', sans-serif;
+    position: absolute;  
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    margin-left: 4px;
+}
+.info p {       
+    color: #ddd;
+    font-size: 13px;
+}         
+.image-view {
+    overflow: hidden;
+}
+ul {
+    padding: 0;
+    margin: 0;
+    list-style: none outside none; 
+}
+li {
+    width: 400px;
+    height: 225px;
+    overflow: hidden;
+    float: left;
+    margin-right: 8px;
+}
+</style>
+<body>
+<div id="wrapper">
+<div id="csv"></div>
+<h1 class="title control"><a href="index.html">Index</a> - {{ title }}</h1> 
+<ul>
+{% for entry in entries %}
+<li class="entry" data-imdbid="{{ entry.imdbid }}">
+<div class="image-view">
+{% if entry.resizedsize %}
+<img class="lazy thumb" src="/blank.gif" 
+    width="{{ entry.resizedsize[0] }}" height="{{ entry.resizedsize[1] }}" 
+    data-original="/screenshots/{{ entry.imgname }}">
+{% endif %}
+</div>                                             
+<div class="info"><h1 class="title">{{ entry.ranking }}. <a href="http://imdb.com/title/{{ entry.imdbid }}">{{ entry.title }}</a></h1>
+<p class="directors">{{ entry.directors }}, {{ entry.year }}</p>
+<p class="rating">{{ entry.mean|round(4) }} by {{ entry.numvoters }} users</p>
+</div>      
+</li> 
+{% endfor %}      
+</ul> 
+</body>
+</html>

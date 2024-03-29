@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ratings for {{ date_updated }}</title>
+<style type="text/css">
+body {
+    font-family: verdana, sans-serif;
+    font-size: 14px;
+}
+p {
+    margin: 0;
+}
+ul {
+    list-style-type: none;
+}
+a {
+    text-decoration: none;
+}
+.users {
+    margin-top: 20px;
+}
+</style>
+</head>
+<body>
+<h1>Ratings for {{ date_updated }}</h1>
+
+<div class="links">
+    <h2>Top 1000 Combined</h2>
+    <p><a href="top1000combined.html">Top 1000</a> - <a href="top1000combined.screens.html">Screenshots</a> - <a href="top1000combined.screens.large.html">Screenshots (Large)</a> - <a href="top1000combined.csv">CSV</a></p>
+    <!--<p><a href="top1000combined.new.html">New</a> - <a href="top1000combined.screens.new.html">Screenshots</a> - <a href="top1000combined.screens.new.large.html">Screenshots (Large)</a> - <a href="top1000combined.new.csv">CSV</a></p>
+    <p><a href="top1000combined.dropped.html">Dropped</a> - <a href="top1000combined.screens.dropped.html">Screenshots</a> - <a href="top1000combined.screens.dropped.large.html">Screenshots (Large)</a> - <a href="top1000combined.dropped.csv">CSV</a></p>-->
+    <br>
+    <h2>Top 1000 Feature films</h2>
+    <p><a href="top1000features.html">Top 1000</a> - <a href="top1000features.screens.html">Screenshots</a> - <a href="top1000features.screens.large.html">Screenshots (Large)</a> - <a href="top1000features.csv">CSV</a></p>
+    <p><a href="top1000features.new.html">New</a> - <a href="top1000features.screens.new.html">Screenshots</a> - <a href="top1000features.screens.new.large.html">Screenshots (Large)</a> - <a href="top1000features.new.csv">CSV</a></p>
+    <p><a href="top1000features.dropped.html">Dropped</a> - <a href="top1000features.screens.dropped.html">Screenshots</a> - <a href="top1000features.screens.dropped.large.html">Screenshots (Large)</a> - <a href="top1000features.dropped.csv">CSV</a></p>
+    <br>
+    <h2>Top 1001-2000 Feature films</h2>
+    <p><a href="top1001-2000features.html">Top 1001-2000</a> - <a href="top1001-2000features.screens.html">Screenshots</a> - <a href="top1001-2000features.screens.large.html">Screenshots (Large)</a> - <a href="top1001-2000features.csv">CSV</a></p>
+    <p><a href="top1001-2000features.new.html">New</a> - <a href="top1001-2000features.screens.new.html">Screenshots</a> - <a href="top1001-2000features.screens.new.large.html">Screenshots (Large)</a> - <a href="top1001-2000features.new.csv">CSV</a></p>
+    <p><a href="top1001-2000features.dropped.html">Dropped</a> - <a href="top1001-2000features.screens.dropped.html">Screenshots</a> - <a href="top1001-2000features.screens.dropped.large.html">Screenshots (Large)</a> - <a href="top1001-2000features.dropped.csv">CSV</a></p>
+    <br>
+    <h2>Top 200 Documentaries</h2>
+    <p><a href="top200docus.html">Top 200</a> - <a href="top200docus.screens.html">Screenshots</a> - <a href="top200docus.screens.large.html">Screenshots (Large)</a> - <a href="top200docus.csv">CSV</a></p>
+    <p><a href="top200docus.new.html">New</a> - <a href="top200docus.screens.new.html">Screenshots</a> - <a href="top200docus.screens.new.large.html">Screenshots (Large)</a> - <a href="top200docus.new.csv">CSV</a></p>
+    <p><a href="top200docus.dropped.html">Dropped</a> - <a href="top200docus.screens.dropped.html">Screenshots</a> - <a href="top200docus.screens.dropped.large.html">Screenshots (Large)</a> - <a href="top200docus.dropped.csv">CSV</a></p>
+    <br>
+    <h2>Top 200 Shorts</h2>
+    <p><a href="top200shorts.html">Top 200</a> - <a href="top200shorts.screens.html">Screenshots</a> - <a href="top200shorts.screens.large.html">Screenshots (Large)</a> - <a href="top200shorts.csv">CSV</a></p>
+    <p><a href="top200shorts.new.html">New</a> - <a href="top200shorts.screens.new.html">Screenshots</a> - <a href="top200shorts.screens.new.large.html">Screenshots (Large)</a> - <a href="top200shorts.new.csv">CSV</a></p>
+    <p><a href="top200shorts.dropped.html">Dropped</a> - <a href="top200shorts.screens.dropped.html">Screenshots</a> - <a href="top200shorts.screens.dropped.large.html">Screenshots (Large)</a> - <a href="top200shorts.dropped.csv">CSV</a></p>
+    <br>
+    <h2>Bottom 100 Feature films</h2>
+    <p><a href="bottom100features.html">Bottom 100</a> - <a href="bottom100features.screens.html">Screenshots</a> - <a href="bottom100features.csv">CSV</a></p>
+    <p><a href="bottom100features.new.html">New</a> - <a href="bottom100features.screens.new.html">Screenshots</a> - <a href="bottom100features.new.csv">CSV</a></p>
+    <p><a href="bottom100features.dropped.html">Dropped</a> - <a href="bottom100features.screens.dropped.html">Screenshots</a> - <a href="bottom100features.dropped.csv">CSV</a></p>
+    <br>
+    <h2>Top 200 Obscure Feature films - 2-4 votes</h2>
+    <p><a href="2votes.html">Top 200</a> - <a href="top200obscure.screens.html">Screenshots</a> - <a href="top200obscure.screens.large.html">Screenshots (Large)</a> - <a href="2votes.csv">CSV</a></p>
+</div>
+
+<div class="users">
+<p>As rated by {{ users|length }} users:</p><br>
+<p>
+{% for user in users -%}
+<span>{{ user }}{% if not loop.last %}, {% endif %}</span>
+{%- endfor %}
+</p>
+</div>
+<br>
+<p><a href="../">Archive</a></p>
+</body>
+</html>
